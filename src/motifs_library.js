@@ -349,3 +349,470 @@ const A_blues = "A:blues";
  *   synth_bass("c2 e2 g2 a2")
  * ).pipe(add_variation);
  */
+
+// ==============================================================================
+// ADVANCED RHYTHM PATTERNS - 進階節奏模板
+// ==============================================================================
+
+// Breakbeat (斷拍)
+const breakbeat = stack(
+  s("bd ~ sd bd ~ sd bd ~").gain(0.8),
+  s("hh*16").gain(0.25).degradeBy(0.2),
+  s("~ ~ ~ ~ ~ ~ cp ~").gain(0.3)
+);
+
+// Half-time Feel (半拍感)
+const halftime_drum = stack(
+  s("bd ~ ~ ~ bd ~ ~ ~").gain(0.85),
+  s("~ ~ sd ~ ~ ~ sd ~").gain(0.6),
+  s("hh*8").gain(0.3).degradeBy(0.3)
+);
+
+// Double-time Feel (倍拍感)
+const doubletime_drum = stack(
+  s("bd*8").gain(0.75),
+  s("hh*16").gain(0.3).pan(sine.slow(2)),
+  s("sd ~ sd ~ sd ~ sd ~").gain(0.5).fast(2)
+);
+
+// Shuffle / Swing (搖擺節奏)
+const shuffle_drum = stack(
+  s("bd ~ ~ bd ~ ~ bd ~").gain(0.8),
+  s("hh ~ hh ~ hh ~ hh ~").gain(0.35).delay(0.0625),  // 微延遲創造 swing 感
+  s("~ ~ sd ~ ~ ~ sd ~").gain(0.5)
+);
+
+// Afrobeat Pattern (非洲節奏)
+const afrobeat = stack(
+  s("bd ~ bd bd ~ bd ~ ~").gain(0.75),
+  s("hh*16").gain(0.25).pan(perlin.range(0.3, 0.7)),
+  s("~ cp ~ ~ cp ~ ~ cp").gain(0.3),
+  s("~ ~ ~ shaker*4 ~").gain(0.2)
+);
+
+// Reggae / Dub Pattern (雷鬼節奏)
+const reggae_drum = stack(
+  s("~ bd ~ bd").gain(0.7),              // 後拍強調
+  s("~ ~ hh ~ ~ ~ hh ~").gain(0.35),
+  s("~ ~ ~ sd").gain(0.5).room(0.7)
+);
+
+// Bossa Nova Pattern (巴薩諾瓦)
+const bossa_nova = stack(
+  s("bd ~ ~ bd ~ bd ~ ~").gain(0.6),
+  s("~ hh ~ hh ~ ~ hh ~").gain(0.3),
+  s("~ ~ ~ ~ sd ~ ~ ~").gain(0.4),
+  s("~ ~ shaker*2 ~ ~ shaker*2 ~").gain(0.15)
+);
+
+// Trap Hi-Hat Roll (Trap 風格快速 Hi-Hat)
+const trap_hats = s("hh*32")
+  .gain(0.3)
+  .degradeBy(0.1)
+  .pan(sine.slow(1).range(0, 1))
+  .every(4, x => x.fast(2))
+  .sometimes(x => x.hpf(4000));
+
+// Triplet Feel (三連音)
+const triplet_drum = stack(
+  s("bd ~ ~ bd ~ ~ bd ~ ~").gain(0.8),
+  s("hh ~ ~ hh ~ ~ hh ~ ~").gain(0.35).fast(1.5),
+  s("~ ~ sd ~ ~ sd ~ ~ sd").gain(0.5)
+);
+
+// ==============================================================================
+// MELODIC PATTERNS - 旋律模板
+// ==============================================================================
+
+// Step Sequencer Pattern (階梯音序器)
+const step_melody = (scale_name) => note("0 2 4 5 7 5 4 2")
+  .scale(scale_name)
+  .sound("square")
+  .gain(0.3)
+  .lpf(1400);
+
+// Octave Jump Melody (八度跳躍)
+const octave_melody = (scale_name) => note("0 12 2 14 4 16 7 19")
+  .scale(scale_name)
+  .sound("triangle")
+  .gain(0.3)
+  .lpf(1600);
+
+// Call and Response (呼應式旋律)
+const call_response = (scale_name) => stack(
+  note("0 2 4 7").scale(scale_name).sound("square").gain(0.3),
+  note("7 4 2 0").scale(scale_name).sound("sine").gain(0.25).delay(0.5)
+);
+
+// Chromatic Run (半音階跑動)
+const chromatic_run = note("c4 c#4 d4 d#4 e4 f4 f#4 g4")
+  .sound("triangle")
+  .lpf(2000)
+  .gain(0.25)
+  .fast(2);
+
+// Pentatonic Riff (五聲音階 Riff)
+const penta_riff = (root) => note(`${root}4 ${root}5 ${root}4 ${root}3`)
+  .scale("C:pentatonic")
+  .sound("sawtooth")
+  .lpf(1200)
+  .gain(0.35)
+  .distort(0.2);
+
+// Modal Interchange (調式交換)
+const modal_melody = stack(
+  note("0 2 4 7").scale("C:major").sound("sine").gain(0.25),
+  note("0 3 5 7").scale("C:minor").sound("triangle").gain(0.2).delay(0.25)
+);
+
+// ==============================================================================
+// BASS PATTERNS - 進階貝斯模板
+// ==============================================================================
+
+// Slap Bass Pattern (打板貝斯)
+const slap_bass = (notes) => note(notes)
+  .sound("square")
+  .lpf(800)
+  .hpf(80)
+  .gain(0.55)
+  .decay(0.15)
+  .distort(0.1);
+
+// Dubstep Wobble Bass (Dubstep 搖擺貝斯)
+const wobble_bass = (notes) => note(notes)
+  .sound("sawtooth")
+  .lpf(sine.fast(8).range(200, 1200))    // 快速 LFO
+  .gain(0.6)
+  .distort(0.3)
+  .room(0.3);
+
+// Minimal Techno Bass (極簡科技貝斯)
+const minimal_bass = (notes) => note(notes)
+  .sound("sine")
+  .lpf(300)
+  .gain(0.65)
+  .decay(0.3)
+  .every(4, x => x.add(note("12")));
+
+// Funk Bass Line (放克貝斯線)
+const funk_bassline = note("c2 ~ c2 ~ e2 ~ ~ g2")
+  .sound("square")
+  .lpf(700)
+  .gain(0.5)
+  .decay(0.2)
+  .sometimes(x => x.add(note("7")));
+
+// Reggae Bass (雷鬼貝斯)
+const reggae_bass = (notes) => note(notes)
+  .sound("sine")
+  .lpf(400)
+  .gain(0.7)
+  .decay(0.5)
+  .delay(0.375)
+  .room(0.5);
+
+// Sub Bass (次低音)
+const sub_bass = (notes) => note(notes)
+  .sound("sine")
+  .lpf(120)
+  .gain(0.8)
+  .decay(0.8)
+  .hpf(30);
+
+// ==============================================================================
+// ADVANCED SYNTH PATTERNS - 進階合成器模板
+// ==============================================================================
+
+// PWM Synth (脈衝寬度調制)
+const pwm_synth = (notes) => note(notes)
+  .sound("square")
+  .lpf(perlin.range(600, 1800))
+  .gain(0.3)
+  .room(0.6)
+  .delay(0.25);
+
+// FM Synth Style (FM 合成器風格)
+const fm_synth = (notes) => note(notes)
+  .sound("sine")
+  .add(sine.fast(4).range(-2, 2))         // 頻率調制
+  .lpf(1600)
+  .gain(0.35)
+  .room(0.5);
+
+// Supersaw (超級鋸齒波)
+const supersaw = (notes) => stack(
+  note(notes).sound("sawtooth").gain(0.25),
+  note(notes).add(note("0.1")).sound("sawtooth").gain(0.25).pan(0.3),
+  note(notes).add(note("-0.1")).sound("sawtooth").gain(0.25).pan(0.7)
+).lpf(1400);
+
+// Detuned Oscillators (失諧振盪器)
+const detuned_synth = (notes) => stack(
+  note(notes).sound("sawtooth").gain(0.2),
+  note(notes).add(note("0.05")).sound("sawtooth").gain(0.2),
+  note(notes).add(note("-0.05")).sound("sawtooth").gain(0.2)
+).lpf(1200);
+
+// Rave Stabs (銳舞 Stabs)
+const rave_stabs = (notes) => note(notes)
+  .sound("sawtooth")
+  .lpf(2000)
+  .gain(0.5)
+  .decay(0.1)
+  .distort(0.2)
+  .delay(0.125);
+
+// Ambient Wash (環境音沖刷)
+const ambient_wash = (notes) => note(notes)
+  .sound("sine")
+  .slow(8)
+  .gain(perlin.range(0.1, 0.3))
+  .lpf(perlin.range(400, 1200))
+  .room(0.95)
+  .delay(0.5);
+
+// ==============================================================================
+// RHYTHMIC VARIATIONS - 節奏變化
+// ==============================================================================
+
+// Polyrhythm (複節奏)
+const polyrhythm = stack(
+  s("bd*4").gain(0.7),                   // 4 拍
+  s("hh*5").gain(0.3),                   // 5 拍
+  s("sd*3").gain(0.4)                    // 3 拍
+);
+
+// Metric Modulation (節拍調制)
+const metric_mod = (pattern) => pattern
+  .every(8, x => x.fast(1.5))
+  .every(16, x => x.slow(1.33));
+
+// Euclidean Rhythm (歐幾里得節奏)
+const euclidean_kick = s("bd(5,8)").gain(0.8);        // 8 拍中打 5 下
+const euclidean_snare = s("sd(3,8)").gain(0.5);       // 8 拍中打 3 下
+const euclidean_hats = s("hh(11,16)").gain(0.3);      // 16 拍中打 11 下
+
+// ==============================================================================
+// EFFECT CHAINS - 效果鏈
+// ==============================================================================
+
+// Dub Echo (Dub 回聲)
+const dub_echo = (pattern) => pattern
+  .delay(0.375)
+  .delaytime(0.375)
+  .delayfeedback(0.7)
+  .room(0.8);
+
+// Tape Stop Effect (磁帶停止效果)
+const tape_stop = (pattern) => pattern
+  .every(16, x => x.slow(4).lpf(400).gain(0.3));
+
+// Reverse Effect (反轉效果)
+const reverse_feel = (pattern) => pattern
+  .every(8, x => x.rev());
+
+// Stutter Effect (結巴效果)
+const stutter = (pattern) => pattern
+  .every(4, x => x.fast(4).cut(1));
+
+// Lo-Fi Effect (Lo-Fi 效果)
+const lofi = (pattern) => pattern
+  .lpf(1200)
+  .hpf(100)
+  .degradeBy(0.2)
+  .distort(0.1)
+  .gain(0.6);
+
+// Sidechain Compression (側鏈壓縮模擬)
+const sidechain = (pattern, kick_pattern) => pattern
+  .gain(sine.fast(4).range(0.3, 0.7));    // 模擬 pumping 效果
+
+// ==============================================================================
+// GENERATIVE PATTERNS - 生成式模板
+// ==============================================================================
+
+// Random Walk (隨機遊走)
+const random_walk = note(perlin.range(0, 12).segment(32))
+  .scale("C:major")
+  .sound("triangle")
+  .gain(0.25)
+  .lpf(1600);
+
+// Probability Gate (機率門)
+const prob_gate = (pattern, probability) => pattern
+  .degradeBy(1 - probability);
+
+// Markov Chain Style (馬可夫鏈風格)
+const markov_melody = note("<0 2 4> <2 4 7> <4 7 9> <7 9 12>")
+  .scale("C:major")
+  .sound("sine")
+  .gain(0.3)
+  .lpf(1800);
+
+// Cellular Automata Rhythm (元胞自動機節奏)
+const ca_rhythm = s("bd(5,8) sd(3,8) hh(7,8)")
+  .gain(0.5)
+  .every(8, x => x.rev());
+
+// ==============================================================================
+// GENRE-SPECIFIC PATTERNS - 特定風格模板
+// ==============================================================================
+
+// Lo-Fi Hip-Hop Beat
+const lofi_hiphop = stack(
+  s("bd ~ ~ ~ bd ~ ~ ~").gain(0.7).lpf(400),
+  s("~ ~ sd ~ ~ ~ sd ~").gain(0.5).room(0.7),
+  s("hh ~ hh ~ hh ~ hh ~").gain(0.25).hpf(3000).degradeBy(0.3),
+  s("~ ~ ~ ~ ~ ~ ~ vinyl").gain(0.15)     // 黑膠噪音
+);
+
+// UK Garage Pattern
+const uk_garage = stack(
+  s("bd ~ ~ bd ~ bd ~ ~").gain(0.8),
+  s("~ ~ sd ~ ~ ~ sd ~").gain(0.6).delay(0.0625),
+  s("hh*16").gain(0.3).pan(sine.slow(2)),
+  s("~ ~ ~ ~ cp ~ ~ ~").gain(0.35)
+);
+
+// Drum and Bass
+const dnb = stack(
+  s("bd ~ bd bd ~ bd ~ bd").gain(0.85).fast(2),
+  s("~ sd ~ sd ~ sd ~ sd").gain(0.6).fast(2).delay(0.125),
+  s("hh*32").gain(0.25).degradeBy(0.2).pan(rand.range(0, 1))
+);
+
+// House 4/4
+const house_beat = stack(
+  s("bd*4").gain(0.9),
+  s("~ ~ ~ ~ ~ ~ ~ oh").gain(0.4).every(2, x => x.degradeBy(0.5)),
+  s("hh*8").gain(0.3).pan(sine.slow(4)),
+  s("~ ~ cp ~").gain(0.35)
+);
+
+// Minimal Techno
+const minimal_techno = stack(
+  s("bd ~ ~ ~ bd ~ ~ ~").gain(0.85),
+  s("~ ~ ~ click ~ click ~ ~").gain(0.3).pan(perlin.range(0, 1)),
+  s("~ ~ sd ~").gain(0.5).delay(0.25).room(0.6),
+  s("hh*8").gain(0.25).degradeBy(0.4).hpf(4000)
+);
+
+// Future Bass
+const future_bass = stack(
+  s("bd ~ ~ ~ bd ~ ~ ~").gain(0.85),
+  s("~ ~ sd ~ ~ ~ sd ~").gain(0.6).room(0.7),
+  s("hh*16").gain(0.3).degradeBy(0.2).pan(sine.slow(1)),
+  note("c5 e5 g5 c6").sound("square").lpf(sine.range(1000, 3000)).gain(0.3).delay(0.125)
+);
+
+// ==============================================================================
+// MICRO-TIMING & GROOVE - 微時序與律動
+// ==============================================================================
+
+// Swing Quantize (搖擺量化)
+const swing_16 = (pattern) => pattern
+  .every(2, x => x.early(0.0625));        // 每兩個音符提前一點
+
+// Humanize (人性化)
+const humanize = (pattern) => pattern
+  .gain(perlin.range(0.4, 0.6))           // 音量隨機化
+  .early(perlin.range(-0.02, 0.02))       // 時間微調
+  .sometimes(x => x.degradeBy(0.05));     // 偶爾掉音符
+
+// Groove Template (律動模板)
+const groove_quantize = (pattern) => pattern
+  .early("<0 -0.03 0 -0.02>")             // 特定的律動模式
+  .gain("<0.5 0.55 0.45 0.6>");
+
+// ==============================================================================
+// SONG STRUCTURE HELPERS - 歌曲結構輔助
+// ==============================================================================
+
+// Build-up (能量累積)
+const buildup = (pattern, bars) => pattern
+  .gain(sine.slow(bars * 4).range(0.3, 0.8))
+  .lpf(sine.slow(bars * 4).range(600, 2400))
+  .every(Math.floor(bars / 2), x => x.fast(1.5));
+
+// Drop (Drop 段落)
+const drop = (pattern) => pattern
+  .gain(0.9)
+  .lpf(2400)
+  .sometimes(x => x.add(note("12")))
+  .delay(0.125);
+
+// Breakdown (分解段)
+const breakdown_section = (pattern) => pattern
+  .slow(2)
+  .lpf(800)
+  .gain(0.5)
+  .room(0.9)
+  .degradeBy(0.3);
+
+// Outro Fade (尾奏淡出)
+const outro_fade = (pattern, bars) => pattern
+  .gain(sine.slow(bars * 4).range(0.5, 0.1))
+  .lpf(sine.slow(bars * 4).range(1200, 400))
+  .room(sine.slow(bars * 4).range(0.7, 0.98));
+
+// ==============================================================================
+// ADVANCED TRANSFORMATIONS - 進階變換
+// ==============================================================================
+
+// Recursive Pattern (遞歸模式)
+const recursive = (pattern, depth) => {
+  let result = pattern;
+  for (let i = 0; i < depth; i++) {
+    result = result.every(Math.pow(2, i), x => x.fast(2));
+  }
+  return result;
+};
+
+// Pattern Morphing (模式變形)
+const morph = (pattern1, pattern2, amount) => stack(
+  pattern1.gain(1 - amount),
+  pattern2.gain(amount)
+);
+
+// Granular Effect (顆粒效果)
+const granular = (pattern) => pattern
+  .fast(4)
+  .cut(1)
+  .pan(rand.range(0, 1))
+  .gain(rand.range(0.3, 0.6));
+
+// Time Stretch (時間伸縮)
+const timestretch = (pattern, factor) => pattern
+  .slow(factor)
+  .speed(1 / factor);
+
+/*
+ * ==============================================================================
+ * USAGE EXAMPLES - 使用範例
+ * ==============================================================================
+ *
+ * // 基本組合
+ * stack(
+ *   house_beat,
+ *   wobble_bass("c2 e2 g2 a2"),
+ *   supersaw("c4 e4 g4 c5")
+ * )
+ *
+ * // 添加效果
+ * stack(dnb, fm_synth("c5 e5 g5"))
+ *   .pipe(dub_echo)
+ *   .pipe(lofi)
+ *
+ * // 生成式音樂
+ * stack(
+ *   euclidean_kick,
+ *   random_walk,
+ *   ambient_wash("c3 e3 g3")
+ * ).pipe(humanize)
+ *
+ * // 歌曲結構
+ * stack(
+ *   future_bass,
+ *   supersaw("c4 e4 g4 c5")
+ * ).pipe(buildup, 8)  // 8 小節 buildup
+ */
